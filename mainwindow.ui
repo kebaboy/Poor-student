@@ -6,19 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>884</width>
-    <height>593</height>
+    <width>557</width>
+    <height>532</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout_4">
     <item row="1" column="0">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="name">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Name</string>
         </property>
@@ -36,13 +45,19 @@
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="cafe">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Cafe</string>
         </property>
        </widget>
       </item>
       <item row="6" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="month">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Month</string>
         </property>
@@ -50,6 +65,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="address">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Address</string>
         </property>
@@ -57,6 +75,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="institute">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Institute</string>
         </property>
@@ -71,15 +92,24 @@
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="cinema">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Cinema</string>
         </property>
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QSpinBox" name="spinBox">
+       <widget class="QSpinBox" name="spinBox_month">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>12</number>
         </property>
        </widget>
       </item>
@@ -99,6 +129,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="city">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>City</string>
         </property>
@@ -121,15 +154,21 @@
      </layout>
     </item>
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="directory">
-        <property name="text">
-         <string>Directory</string>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QPushButton" name="calculate">
         <property name="enabled">
          <bool>false</bool>
@@ -145,6 +184,79 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="directory">
+        <property name="text">
+         <string>Directory</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="clear">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QRadioButton" name="radioButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Include expenses related to age?</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="age">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Age</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_age">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="maximum">
+         <number>70</number>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -154,7 +266,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>884</width>
+     <width>557</width>
      <height>25</height>
     </rect>
    </property>

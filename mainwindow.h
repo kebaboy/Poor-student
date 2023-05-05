@@ -21,6 +21,11 @@ public:
 private slots:
     void on_directory_clicked();
 
+    void on_radioButton_clicked();
+
+    void allclear();
+    void on_clear_clicked();
+
 private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;

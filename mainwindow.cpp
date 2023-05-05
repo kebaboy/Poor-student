@@ -18,6 +18,37 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::allclear()
+{
+    ui->cafe_line->setEnabled(false);
+    ui->cafe_line->clear();
+    ui->city_line->setEnabled(false);
+    ui->city_line->clear();
+    ui->address_line->setEnabled(false);
+    ui->address_line->clear();
+    ui->institute_line->setEnabled(false);
+    ui->institute_line->clear();
+    ui->name_line->setEnabled(false);
+    ui->name_line->clear();
+    ui->cinema_line->setEnabled(false);
+    ui->cinema_line->clear();
+    ui->spinBox_month->setEnabled(false);
+    ui->spinBox_month->clear();
+    ui->calculate->setEnabled(false);
+    ui->cafe->setEnabled(false);
+    ui->city->setEnabled(false);
+    ui->address->setEnabled(false);
+    ui->institute->setEnabled(false);
+    ui->name->setEnabled(false);
+    ui->cinema->setEnabled(false);
+    ui->month->setEnabled(false);
+    ui->radioButton->setEnabled(false);
+    ui->radioButton->setChecked(false);
+    ui->age->setEnabled(false);
+    ui->spinBox_age->setEnabled(false);
+    ui->spinBox_age->clear();
+    ui->clear->setEnabled(false);
+}
 
 void MainWindow::on_directory_clicked()
 {
@@ -31,17 +62,19 @@ void MainWindow::on_directory_clicked()
         ui->institute_line->setEnabled(true);
         ui->name_line->setEnabled(true);
         ui->cinema_line->setEnabled(true);
-        ui->spinBox->setEnabled(true);
+        ui->spinBox_month->setEnabled(true);
         ui->calculate->setEnabled(true);
+        ui->cafe->setEnabled(true);
+        ui->city->setEnabled(true);
+        ui->address->setEnabled(true);
+        ui->institute->setEnabled(true);
+        ui->name->setEnabled(true);
+        ui->cinema->setEnabled(true);
+        ui->month->setEnabled(true);
+        ui->radioButton->setEnabled(true);
+        ui->clear->setEnabled(true);
     } else {
-        ui->cafe_line->setEnabled(false);
-        ui->city_line->setEnabled(false);
-        ui->address_line->setEnabled(false);
-        ui->institute_line->setEnabled(false);
-        ui->name_line->setEnabled(false);
-        ui->cinema_line->setEnabled(false);
-        ui->spinBox->setEnabled(false);
-        ui->calculate->setEnabled(false);
+        allclear();
         QMessageBox::warning(this, "warning", "Try another folder");
     }
     qDebug() << "Directory Path:" << directory;
@@ -90,4 +123,27 @@ void MainWindow::on_directory_clicked()
     QCompleter *completerCinemas = new QCompleter(qlist, this);
     completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
     ui->cinema_line->setCompleter(completerCinemas);
+}
+
+void MainWindow::on_radioButton_clicked()
+{
+    if (ui->radioButton->isChecked()) {
+        ui->age->setEnabled(true);
+        ui->spinBox_age->setEnabled(true);
+    } else {
+        ui->age->setEnabled(false);
+        ui->spinBox_age->setEnabled(false);
+    }
+}
+
+void MainWindow::on_clear_clicked()
+{
+    ui->cafe_line->clear();
+    ui->city_line->clear();
+    ui->address_line->clear();
+    ui->institute_line->clear();
+    ui->name_line->clear();
+    ui->cinema_line->clear();
+    ui->spinBox_month->setValue(0);
+    ui->spinBox_age->setValue(0);
 }
