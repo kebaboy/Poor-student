@@ -4,16 +4,31 @@
 #include <sstream>
 #include "DatabaseHandler.h"
 
-DatabaseHandler::DatabaseHandler() {
-    _directoryPath = "";
-}
+DatabaseHandler::DatabaseHandler(): _directoryPath("") {}
 
-DatabaseHandler::DatabaseHandler(const std::string& directoryPath) {
-    _directoryPath = directoryPath;
-}
+DatabaseHandler::DatabaseHandler(const std::string& directoryPath): _directoryPath(directoryPath) {}
 
-void DatabaseHandler::SetPath(const std::string& path) {
+void DatabaseHandler::setPath(const std::string& path) {
     _directoryPath = path;
+}
+
+bool DatabaseHandler::initDatabase() const {
+    std::ifstream cafcinFile(_directoryPath + '/' + _cafcin);
+    std::ifstream costsFile(_directoryPath + '/' + _costs);
+    std::ifstream instFile(_directoryPath + '/' + _inst);
+    std::ifstream trFile(_directoryPath + '/' + _tr);
+    if (cafcinFile.is_open() && costsFile.is_open() && instFile.is_open() && trFile.is_open()) {
+        cafcinFile.close();
+        costsFile.close();
+        instFile.close();
+        trFile.close();
+        return true;
+    } else
+        cafcinFile.close();
+        costsFile.close();
+        instFile.close();
+        trFile.close();
+        return false;
 }
 
 unsigned int DatabaseHandler::getWorkdays(unsigned int month) const {

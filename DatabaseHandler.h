@@ -6,12 +6,13 @@ private:
     const std::string _cafcin = "Caffe-and-cinema.csv";
     const std::string _costs = "Costs.csv";
     const std::string _inst = "Institute.csv";
-    const std::string _tr = "Transport.csv"; // пути чтобы был класс
+    const std::string _tr = "Transport.csv";
     std::string _directoryPath;
 public:
     DatabaseHandler();
     DatabaseHandler(const std::string& directoryPath);
-    void SetPath(const std::string& path);
+    void setPath(const std::string& path);
+    bool initDatabase() const;
     unsigned int getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const;
     unsigned int getInstituteDinnerCost(const std::string& city, const std::string& institute) const;
