@@ -24,8 +24,12 @@ private slots:
     void on_radioButton_clicked();
 
     void allclear();
+
     void on_clear_clicked();
 
+    void on_calculate_clicked();
+
+    bool checkLines();
 private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;
