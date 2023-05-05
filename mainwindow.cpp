@@ -231,6 +231,16 @@ void MainWindow::on_calculate_clicked()
 {
     if (checkLines()) {
         qDebug() << "ok\n";
+        if (ui->spinBox_age->isEnabled()) {
+            _student->setAge(ui->spinBox_age->value());
+        } else {
+            _student->setAge(0);
+        }
+        _student->setCity(ui->city_line->text().toStdString());
+        _student->setHomeAdress(ui->address_line->text().toStdString());
+        _student->setInstitute(ui->institute_line->text().toStdString());
+        unsigned int costs = _student->getCosts(ui->spinBox_month->value(), _student->getCity(), _student->getHomeAdress(), _student->getInstitute(), ui->cinema_line->text().toStdString(), ui->cafe_line->text().toStdString(), _student->getAge(), *_database);
+        ui->output->setText(QString::number(costs));
     } else {
         qDebug() << "neok\n";
     }

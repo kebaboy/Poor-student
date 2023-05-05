@@ -134,10 +134,10 @@ unsigned int DatabaseHandler::getDaysCount(unsigned int month) const {
 }
 
 unsigned int DatabaseHandler::getHomeFoodCost(const std::string& city, unsigned int age, unsigned int month) const {
-    std::ifstream food(_directoryPath + _costs);
-    if (!food.is_open()) {
-        return 0;
-    }
+    std::ifstream food(_directoryPath + '/' + _costs);
+//    if (!food.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;
@@ -173,10 +173,10 @@ unsigned int DatabaseHandler::getHomeFoodCost(const std::string& city, unsigned 
 }
 
 unsigned int DatabaseHandler::getCinemaCost(const std::string& city, const std::string& cinema) const {
-    std::ifstream kino(_directoryPath + _cafcin);
-    if (!kino.is_open()) {
-        return 0;
-    }
+    std::ifstream kino(_directoryPath + '/' + _cafcin);
+//    if (!kino.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;
@@ -214,10 +214,10 @@ unsigned int DatabaseHandler::getCinemaCost(const std::string& city, const std::
 }
 
 unsigned int DatabaseHandler::getCoffeeCost(const std::string& city, const std::string& coffee) const {
-    std::ifstream cofe(_directoryPath + _cafcin);
-    if (!cofe.is_open()) {
-        return 0;
-    }
+    std::ifstream cofe(_directoryPath + '/' + _cafcin);
+//    if (!cofe.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;
@@ -254,10 +254,10 @@ unsigned int DatabaseHandler::getCoffeeCost(const std::string& city, const std::
 
 unsigned int DatabaseHandler::getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const {
-    std::ifstream transport(_directoryPath + _tr);
-    if (!transport.is_open()) {
-        return 0;
-    }
+    std::ifstream transport(_directoryPath + '/' + _tr);
+//    if (!transport.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;
@@ -297,10 +297,10 @@ unsigned int DatabaseHandler::getTransportCost(const std::string& city, const st
 }
 
 unsigned int DatabaseHandler::getInstituteDinnerCost(const std::string& city, const std::string& institute) const {
-    std::ifstream dinner(_directoryPath + _inst);
-    if (!dinner.is_open()) {
-        return 0;
-    }
+    std::ifstream dinner(_directoryPath + '/' + _inst);
+//    if (!dinner.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;
@@ -335,10 +335,10 @@ unsigned int DatabaseHandler::getInstituteDinnerCost(const std::string& city, co
 }
 
 unsigned int DatabaseHandler::getOtherMontlyCosts(unsigned int month, const std::string& city, unsigned int age) const {
-    std::ifstream other(_directoryPath + _costs);
-    if (!other.is_open()) {
-        return 0;
-    }
+    std::ifstream other(_directoryPath + '/' + _costs);
+//    if (!other.is_open()) {
+//        return 0;
+//    }
     int tr = 0;
     std::string word;
     std::string cost;

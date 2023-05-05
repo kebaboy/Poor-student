@@ -65,13 +65,22 @@ unsigned int Student::getCosts(unsigned int month, const std::string& city, cons
     const unsigned int workDays = base.getWorkdays(month);
     const unsigned int weekends = daysCount - workDays;
 
+    if (age == 0) {
+        return workDays * getWorkdayCost(city, homeAddress, institute, age, month, base) +
+           weekends * getWeekandCost(city, cinema, coffee, age, month, base);
+    }
     return workDays * getWorkdayCost(city, homeAddress, institute, age, month, base) +
-           weekends * getWeekandCost(city, cinema, coffee, age, month, base) + 
-           base.getOtherMontlyCosts(month, city, age);
+            weekends * getWeekandCost(city, cinema, coffee, age, month, base) +
+            base.getOtherMontlyCosts(month, city, age);
 }
 
 unsigned int Student::getWeekandCost(const std::string& city, const std::string& cinema,
                     const std::string& coffee, unsigned int age, unsigned int month, const DatabaseHandler& base) const {
+    if (age == 0) {
+        std::cout << "getWeekendCost: 0.66 * " << 0 << " + " << base.getCinemaCost(city, cinema) << " + " << base.getCoffeeCost(city, coffee) << " + 0.5\n";
+        return static_cast<unsigned int>(0.66 * 0 +
+            base.getCinemaCost(city, cinema) + base.getCoffeeCost(city, coffee) + 0.5);
+    }
     std::cout << "getWeekendCost: 0.66 * " << base.getHomeFoodCost(city, age, month) << " + " << base.getCinemaCost(city, cinema) << " + " << base.getCoffeeCost(city, coffee) << " + 0.5\n";
     return static_cast<unsigned int>(0.66 * base.getHomeFoodCost(city, age, month) + 
         base.getCinemaCost(city, cinema) + base.getCoffeeCost(city, coffee) + 0.5);
@@ -79,6 +88,11 @@ unsigned int Student::getWeekandCost(const std::string& city, const std::string&
 
 unsigned int Student::getWorkdayCost(const std::string& city, const std::string& homeAddress,
                     const std::string& institute, unsigned int age, unsigned int month, const DatabaseHandler& base) const {
+    if (age == 0) {
+        std::cout << "getWorkdayCost: 2 * " << base.getTransportCost(city, homeAddress, institute) << " + " << base.getInstituteDinnerCost(city, institute) << " + 0.66 * " << 0 << " + 0.5\n";
+        return static_cast<unsigned int>(2 * base.getTransportCost(city, homeAddress, institute) +
+            base.getInstituteDinnerCost(city, institute) + 0.66 * 0 + 0.5);
+    }
     std::cout << "getWorkdayCost: 2 * " << base.getTransportCost(city, homeAddress, institute) << " + " << base.getInstituteDinnerCost(city, institute) << " + 0.66 * " << base.getHomeFoodCost(city, age, month) << " + 0.5\n";
     return static_cast<unsigned int>(2 * base.getTransportCost(city, homeAddress, institute) +
         base.getInstituteDinnerCost(city, institute) + 0.66 * base.getHomeFoodCost(city, age, month) + 0.5);
