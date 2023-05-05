@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 #include "DatabaseHandler.h"
 
 DatabaseHandler::DatabaseHandler(): _directoryPath("") {}
@@ -29,6 +31,94 @@ bool DatabaseHandler::initDatabase() const {
         instFile.close();
         trFile.close();
         return false;
+}
+
+std::vector<std::string> DatabaseHandler::getCities() {
+    std::vector<std::string> v;
+    std::ifstream transport(_directoryPath + '/' + _tr);
+    std::string line;
+    getline(transport, line);
+    while(getline(transport, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), word) == v.end()) {
+            v.push_back(word);
+        }
+    }
+    return v;
+}
+
+std::vector<std::string> DatabaseHandler::getAddresses() {
+    std::vector<std::string> v;
+    std::ifstream addresses(_directoryPath + '/' + _tr);
+    std::string line;
+    getline(addresses, line);
+    while(getline(addresses, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), word) == v.end()) {
+            v.push_back(word);
+        }
+    }
+    return v;
+}
+
+std::vector<std::string> DatabaseHandler::getInstitutes() {
+    std::vector<std::string> v;
+    std::ifstream institutes(_directoryPath + '/' + _inst);
+    std::string line;
+    getline(institutes, line);
+    while(getline(institutes, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), word) == v.end()) {
+            v.push_back(word);
+        }
+    }
+    return v;
+}
+
+std::vector<std::string> DatabaseHandler::getCafes() {
+    std::vector<std::string> v;
+    std::ifstream cafes(_directoryPath + '/' + _cafcin);
+    std::string line;
+    getline(cafes, line);
+    while(getline(cafes, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), word) == v.end()) {
+            v.push_back(word);
+        }
+    }
+    return v;
+}
+
+std::vector<std::string> DatabaseHandler::getCinemas() {
+    std::vector<std::string> v;
+    std::ifstream cinemas(_directoryPath + '/' + _cafcin);
+    std::string line;
+    getline(cinemas, line);
+    while(getline(cinemas, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), word) == v.end()) {
+            v.push_back(word);
+        }
+    }
+    return v;
 }
 
 unsigned int DatabaseHandler::getWorkdays(unsigned int month) const {

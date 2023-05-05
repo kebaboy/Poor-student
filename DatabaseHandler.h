@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 class DatabaseHandler
 {
@@ -13,6 +14,11 @@ public:
     DatabaseHandler(const std::string& directoryPath);
     void setPath(const std::string& path);
     bool initDatabase() const;
+    std::vector<std::string> getCities();
+    std::vector<std::string> getAddresses();
+    std::vector<std::string> getInstitutes();
+    std::vector<std::string> getCafes();
+    std::vector<std::string> getCinemas();
     unsigned int getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const;
     unsigned int getInstituteDinnerCost(const std::string& city, const std::string& institute) const;
