@@ -58,6 +58,10 @@ void MainWindow::allclear()
     ui->spinBox_age->setValue(0);
     ui->spinBox_age->setStyleSheet("");
     ui->clear->setEnabled(false);
+    ui->tr->setVisible(false);
+    ui->cafcin->setVisible(false);
+    ui->costs->setVisible(false);
+    ui->inst->setVisible(false);
 }
 
 void MainWindow::on_directory_clicked()
@@ -66,6 +70,14 @@ void MainWindow::on_directory_clicked()
 //    _database = new DatabaseHandler();
     _database->setPath(directory.toStdString());
     if (_database->initDatabase()) {
+        ui->costs->setText(QString::fromStdString(_database->getCosts()));
+        ui->costs->setVisible(true);
+        ui->inst->setText(QString::fromStdString(_database->getInst()));
+        ui->inst->setVisible(true);
+        ui->tr->setText(QString::fromStdString(_database->getTr()));
+        ui->tr->setVisible(true);
+        ui->cafcin->setText(QString::fromStdString(_database->getCafcin()));
+        ui->cafcin->setVisible(true);
         ui->output->setText("");
         ui->cafe_line->setEnabled(true);
         ui->city_line->setEnabled(true);
@@ -84,58 +96,58 @@ void MainWindow::on_directory_clicked()
         ui->month->setEnabled(true);
         ui->radioButton->setEnabled(true);
         ui->clear->setEnabled(true);
+        std::vector<std::string> v = _database->getCities();
+        QStringList qlist;
+        for(auto elem: v) {
+            qlist.append(QString::fromStdString(elem));
+        }
+        QCompleter *completerCities = new QCompleter(qlist, this);
+        //qDebug() << completerCities->parent(); при удалении родительского MainWindow дочерние также удалаются
+        completerCities->setCaseSensitivity(Qt::CaseInsensitive);
+        ui->city_line->setCompleter(completerCities);
+
+        v = _database->getAddresses();
+        qlist.clear();
+        for(auto elem: v) {
+            qlist.append(QString::fromStdString(elem));
+        }
+        QCompleter *completerAddresses = new QCompleter(qlist, this);
+        completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
+        ui->address_line->setCompleter(completerAddresses);
+
+        v = _database->getInstitutes();
+        qlist.clear();
+        for(auto elem: v) {
+            qlist.append(QString::fromStdString(elem));
+        }
+        QCompleter *completerInstitutes = new QCompleter(qlist, this);
+        completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
+        ui->institute_line->setCompleter(completerInstitutes);
+
+        v = _database->getCafes();
+        qlist.clear();
+        for(auto elem: v) {
+            qlist.append(QString::fromStdString(elem));
+        }
+        QCompleter *completerCafes = new QCompleter(qlist, this);
+        completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
+        ui->cafe_line->setCompleter(completerCafes);
+
+        v = _database->getCinemas();
+        qlist.clear();
+        for(auto elem: v) {
+            qlist.append(QString::fromStdString(elem));
+        }
+        QCompleter *completerCinemas = new QCompleter(qlist, this);
+        completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
+        ui->cinema_line->setCompleter(completerCinemas);
+
     } else {
         allclear();
         QMessageBox::warning(this, "warning", "Try another folder");
     }
     qDebug() << "Directory Path:" << directory;
 //    delete [] _database;
-    std::vector<std::string> v = _database->getCities();
-    QStringList qlist;
-    for(auto elem: v) {
-        qlist.append(QString::fromStdString(elem));
-    }
-    QCompleter *completerCities = new QCompleter(qlist, this);
-    //qDebug() << completerCities->parent(); при удалении родительского MainWindow дочерние также удалаются
-    completerCities->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->city_line->setCompleter(completerCities);
-
-    v = _database->getAddresses();
-    qlist.clear();
-    for(auto elem: v) {
-        qlist.append(QString::fromStdString(elem));
-    }
-    QCompleter *completerAddresses = new QCompleter(qlist, this);
-    completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->address_line->setCompleter(completerAddresses);
-
-    v = _database->getInstitutes();
-    qlist.clear();
-    for(auto elem: v) {
-        qlist.append(QString::fromStdString(elem));
-    }
-    QCompleter *completerInstitutes = new QCompleter(qlist, this);
-    completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->institute_line->setCompleter(completerInstitutes);
-
-    v = _database->getCafes();
-    qlist.clear();
-    for(auto elem: v) {
-        qlist.append(QString::fromStdString(elem));
-    }
-    QCompleter *completerCafes = new QCompleter(qlist, this);
-    completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->cafe_line->setCompleter(completerCafes);
-
-    v = _database->getCinemas();
-    qlist.clear();
-    for(auto elem: v) {
-        qlist.append(QString::fromStdString(elem));
-    }
-    QCompleter *completerCinemas = new QCompleter(qlist, this);
-    completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
-    ui->cinema_line->setCompleter(completerCinemas);
-
 }
 
 void MainWindow::on_radioButton_clicked()

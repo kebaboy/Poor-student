@@ -43,6 +43,7 @@ else()
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    resource.qrc
   )
 endif()
 
