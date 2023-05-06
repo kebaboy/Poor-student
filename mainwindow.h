@@ -29,10 +29,13 @@ private slots:
 
     void on_calculate_clicked();
 
-    bool checkLines();
+    bool begincheckLines();
+
+    bool endcheckLines();
 private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;
     Student* _student;
+
 };
 #endif // MAINWINDOW_H

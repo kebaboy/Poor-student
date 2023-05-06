@@ -121,6 +121,23 @@ std::vector<std::string> DatabaseHandler::getCinemas() {
     return v;
 }
 
+std::vector<unsigned int> DatabaseHandler::getAges() {
+    std::vector<unsigned int> v;
+    std::ifstream costs(_directoryPath + '/' + _costs);
+    std::string line;
+    getline(costs, line);
+    while(getline(costs, line)) {
+        std::stringstream lineStream(line);
+        std::string word;
+        std::getline(lineStream, word, ',');
+        std::getline(lineStream, word, ',');
+        if (std::find(v.begin(), v.end(), stoi(word)) == v.end()) {
+            v.push_back(stoi(word));
+        }
+    }
+    return v;
+}
+
 unsigned int DatabaseHandler::getWorkdays(unsigned int month) const {
     unsigned int wdayz[] = {17, 18, 22, 20, 20, 21, 21, 23, 21, 22, 21, 21};
     unsigned int wdays = wdayz[month - 1];
@@ -366,8 +383,9 @@ unsigned int DatabaseHandler::getOtherMontlyCosts(unsigned int month, const std:
         }
     }
     if (tr == 0) {
-        std::cout << "There is no other montly cost for city: " << city << ", age: " << age << std::endl;
-        exit(0);
+        return 0;
+//        std::cout << "There is no other montly cost for city: " << city << ", age: " << age << std::endl;
+//        exit(0);
     }
     unsigned int costt = std::stoi(cost);
     other.close();

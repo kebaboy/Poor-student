@@ -19,6 +19,7 @@ public:
     std::vector<std::string> getInstitutes();
     std::vector<std::string> getCafes();
     std::vector<std::string> getCinemas();
+    std::vector<unsigned int> getAges();
     unsigned int getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const;
     unsigned int getInstituteDinnerCost(const std::string& city, const std::string& institute) const;

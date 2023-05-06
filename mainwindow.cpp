@@ -20,6 +20,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::allclear()
 {
+    ui->output->setText("");
     ui->cafe_line->setEnabled(false);
     ui->cafe_line->clear();
     ui->cafe_line->setStyleSheet("");
@@ -65,6 +66,7 @@ void MainWindow::on_directory_clicked()
 //    _database = new DatabaseHandler();
     _database->setPath(directory.toStdString());
     if (_database->initDatabase()) {
+        ui->output->setText("");
         ui->cafe_line->setEnabled(true);
         ui->city_line->setEnabled(true);
         ui->address_line->setEnabled(true);
@@ -94,6 +96,7 @@ void MainWindow::on_directory_clicked()
         qlist.append(QString::fromStdString(elem));
     }
     QCompleter *completerCities = new QCompleter(qlist, this);
+    //qDebug() << completerCities->parent(); при удалении родительского MainWindow дочерние также удалаются
     completerCities->setCaseSensitivity(Qt::CaseInsensitive);
     ui->city_line->setCompleter(completerCities);
 
@@ -132,6 +135,7 @@ void MainWindow::on_directory_clicked()
     QCompleter *completerCinemas = new QCompleter(qlist, this);
     completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
     ui->cinema_line->setCompleter(completerCinemas);
+
 }
 
 void MainWindow::on_radioButton_clicked()
@@ -148,6 +152,7 @@ void MainWindow::on_radioButton_clicked()
 
 void MainWindow::on_clear_clicked()
 {
+    ui->output->clear();
     ui->cafe_line->clear();
     ui->cafe_line->setStyleSheet("");
     ui->city_line->clear();
@@ -166,7 +171,7 @@ void MainWindow::on_clear_clicked()
     ui->spinBox_age->setStyleSheet("");
 }
 
-bool MainWindow::checkLines()
+bool MainWindow::begincheckLines()
 {
     bool flag = true;
     if (ui->name_line->text() == "") {
@@ -227,21 +232,105 @@ bool MainWindow::checkLines()
     return flag;
 }
 
+bool MainWindow::endcheckLines() {
+    bool flag = true;
+    ui->output->setStyleSheet("QLabel { color: red; }");
+
+    bool flagcity = false;
+    for (int i = 0; ui->city_line->completer()->setCurrentRow(i); i++)
+        if (ui->city_line->completer()->currentCompletion() == ui->city_line->text()) {
+            flagcity = true;
+            break;
+        }
+    if (flagcity == false) {
+        flag = false;
+        ui->city_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
+        ui->output->setText(ui->output->text() + '\n' + ui->city->text() + " \"" + ui->city_line->text() + "\" " + "not found");
+    }
+
+    bool flagaddress = false;
+    for (int i = 0; ui->address_line->completer()->setCurrentRow(i); i++)
+        if (ui->address_line->completer()->currentCompletion() == ui->address_line->text()) {
+            flagaddress = true;
+            break;
+        }
+    if (flagaddress == false) {
+        flag = false;
+        ui->address_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
+        ui->output->setText(ui->output->text() + '\n' + ui->address->text() + " \"" + ui->address_line->text() + "\" " + "not found");
+    }
+
+    bool flaginstitute = false;
+    for (int i = 0; ui->institute_line->completer()->setCurrentRow(i); i++)
+        if (ui->institute_line->completer()->currentCompletion() == ui->institute_line->text()) {
+            flaginstitute = true;
+            break;
+        }
+    if (flaginstitute == false) {
+        flag = false;
+        ui->institute_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
+        ui->output->setText(ui->output->text() + '\n' + ui->institute->text() + " \"" + ui->institute_line->text() + "\" " + "not found");
+    }
+
+    bool flagcafe = false;
+    for (int i = 0; ui->cafe_line->completer()->setCurrentRow(i); i++)
+        if (ui->cafe_line->completer()->currentCompletion() == ui->cafe_line->text()) {
+            flagcafe = true;
+            break;
+        }
+    if (flagcafe == false) {
+        flag = false;
+        ui->cafe_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
+        ui->output->setText(ui->output->text() + '\n' + ui->cafe->text() + " \"" + ui->cafe_line->text() + "\" " + "not found");
+    }
+
+    bool flagcinema = false;
+    for (int i = 0; ui->cinema_line->completer()->setCurrentRow(i); i++)
+        if (ui->cinema_line->completer()->currentCompletion() == ui->cinema_line->text()) {
+            flagcinema = true;
+            break;
+        }
+    if (flagcinema == false) {
+        flag = false;
+        ui->cinema_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
+        ui->output->setText(ui->output->text() + '\n' + ui->cinema->text() + " \"" + ui->cinema_line->text() + "\" " + "not found");
+    }
+
+    if (ui->spinBox_age->isEnabled()) {
+        std::vector<unsigned int> v = _database->getAges();
+        if (std::find(v.begin(), v.end(), ui->spinBox_age->value()) == v.end()) {
+            flag = false;
+            ui->spinBox_age->setStyleSheet("QSpinBox {\nborder: 1px solid red;\n}");
+            ui->output->setText(ui->output->text() + '\n' + ui->age->text() + " \"" + ui->spinBox_age->text() + "\" " + "not found");
+        }
+    }
+
+
+    return flag;
+
+}
+
 void MainWindow::on_calculate_clicked()
 {
-    if (checkLines()) {
+    ui->output->clear();
+    if (begincheckLines()) {
         qDebug() << "ok\n";
-        if (ui->spinBox_age->isEnabled()) {
-            _student->setAge(ui->spinBox_age->value());
-        } else {
-            _student->setAge(0);
+        if (endcheckLines()) {
+            qDebug() << "ok2\n";
+            if (ui->spinBox_age->isEnabled()) {
+                _student->setAge(ui->spinBox_age->value());
+            } else {
+                _student->setAge(0);
+            }
+            _student->setCity(ui->city_line->text().toStdString());
+            _student->setHomeAdress(ui->address_line->text().toStdString());
+            _student->setInstitute(ui->institute_line->text().toStdString());
+            unsigned int costs = _student->getCosts(ui->spinBox_month->value(), _student->getCity(), _student->getHomeAdress(), _student->getInstitute(), ui->cinema_line->text().toStdString(), ui->cafe_line->text().toStdString(), _student->getAge(), *_database);
+            ui->output->setStyleSheet("QLabel { color: green; }");
+            ui->output->setText("Student " + ui->name_line->text() + " spends " + QString::number(costs) + " rubles in month " + ui->spinBox_month->text());
         }
-        _student->setCity(ui->city_line->text().toStdString());
-        _student->setHomeAdress(ui->address_line->text().toStdString());
-        _student->setInstitute(ui->institute_line->text().toStdString());
-        unsigned int costs = _student->getCosts(ui->spinBox_month->value(), _student->getCity(), _student->getHomeAdress(), _student->getInstitute(), ui->cinema_line->text().toStdString(), ui->cafe_line->text().toStdString(), _student->getAge(), *_database);
-        ui->output->setText(QString::number(costs));
     } else {
         qDebug() << "neok\n";
+        ui->output->setText("");
     }
 }
