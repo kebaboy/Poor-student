@@ -246,7 +246,7 @@ bool MainWindow::begincheckLines()
 
 bool MainWindow::endcheckLines() {
     bool flag = true;
-    ui->output->setStyleSheet("QLabel { color: red; }");
+    ui->output->setStyleSheet("QLabel { color: red; font-size: 25px;}");
 
     bool flagcity = false;
     for (int i = 0; ui->city_line->completer()->setCurrentRow(i); i++)
@@ -338,11 +338,39 @@ void MainWindow::on_calculate_clicked()
             _student->setHomeAdress(ui->address_line->text().toStdString());
             _student->setInstitute(ui->institute_line->text().toStdString());
             unsigned int costs = _student->getCosts(ui->spinBox_month->value(), _student->getCity(), _student->getHomeAdress(), _student->getInstitute(), ui->cinema_line->text().toStdString(), ui->cafe_line->text().toStdString(), _student->getAge(), *_database);
-            ui->output->setStyleSheet("QLabel { color: green; }");
+            ui->output->setStyleSheet("QLabel { color: green; font-size: 25px;}");
             ui->output->setText("Student " + ui->name_line->text() + " spends " + QString::number(costs) + " rubles in month " + ui->spinBox_month->text());
         }
     } else {
         qDebug() << "neok\n";
         ui->output->setText("");
     }
+}
+
+void MainWindow::on_costs_clicked()
+{
+    _table = new table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getCosts()));
+    _table->setModal(true);
+    _table->exec();
+}
+
+void MainWindow::on_cafcin_clicked()
+{
+    _table = new table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getCafcin()));
+    _table->setModal(true);
+    _table->exec();
+}
+
+void MainWindow::on_inst_clicked()
+{
+    _table = new table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getInst()));
+    _table->setModal(true);
+    _table->exec();
+}
+
+void MainWindow::on_tr_clicked()
+{
+    _table = new table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getTr()));
+    _table->setModal(true);
+    _table->exec();
 }

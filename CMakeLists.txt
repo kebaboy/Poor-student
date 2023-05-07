@@ -44,6 +44,9 @@ else()
     mainwindow.h
     mainwindow.ui
     resource.qrc
+    table.cpp
+    table.h
+    table.ui
   )
 endif()
 

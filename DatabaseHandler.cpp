@@ -408,3 +408,7 @@ std::string DatabaseHandler::getInst() const {
 std::string DatabaseHandler::getTr() const {
     return _tr;
 }
+
+std::string DatabaseHandler::getPath() const {
+    return _directoryPath;
+}

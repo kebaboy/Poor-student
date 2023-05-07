@@ -33,4 +33,5 @@ public:
     std::string getCosts() const;
     std::string getInst() const;
     std::string getTr() const;
+    std::string getPath() const;
 };

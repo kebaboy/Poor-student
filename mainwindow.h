@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
+#include "table.h"
 #include "Student.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,10 +33,18 @@ private slots:
     bool begincheckLines();
 
     bool endcheckLines();
+    void on_costs_clicked();
+
+    void on_cafcin_clicked();
+
+    void on_inst_clicked();
+
+    void on_tr_clicked();
+
 private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;
     Student* _student;
-
+    table* _table;
 };
 #endif // MAINWINDOW_H
