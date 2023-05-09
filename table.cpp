@@ -42,6 +42,11 @@ table::~table()
     delete ui;
 }
 
+void table::closeEvent(QCloseEvent* event) {
+    QDialog::closeEvent(event);
+    emit dialogClosed(_path);
+}
+
 void table::on_pushButton_clicked()
 {
     ui->label->setText("");
@@ -70,4 +75,5 @@ void table::on_pushButton_clicked()
     out << textData;
     csvFile.close();
     ui->label->setText("Changes successfully saved");
+
 }

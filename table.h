@@ -16,8 +16,11 @@ class table : public QDialog
 
 public:
     explicit table(const QString& path, QWidget *parent = nullptr);
-    ~table();   
-
+    ~table();
+signals:
+    void dialogClosed(const QString& path);
+protected:
+    void closeEvent(QCloseEvent* event) override;
 private slots:
     void on_pushButton_clicked();
 
