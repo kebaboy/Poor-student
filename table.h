@@ -10,13 +10,13 @@ namespace Ui {
 class table;
 }
 
-class table : public QDialog
+class Table : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit table(const QString& path, QWidget *parent = nullptr);
-    ~table();
+    explicit Table(const QString& path, QWidget *parent = nullptr);
+    ~Table();
 signals:
     void dialogClosed(const QString& path);
 protected:

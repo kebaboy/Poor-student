@@ -2,7 +2,7 @@
 #include "ui_table.h"
 #include <QDebug>
 
-table::table(const QString& path, QWidget *parent) :
+Table::Table(const QString& path, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::table),
     _path(path)
@@ -28,47 +28,42 @@ table::table(const QString& path, QWidget *parent) :
     file.close();
     _table->setColumnCount(100);
     _table->setRowCount(100);
-
-//    for(int row=0; row!=_tableWidget->rowCount(); ++row){
-//        for(int column=0; column!=_tableWidget->columnCount(); ++column) {
-//            QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg((row+1)*(column+1)));
-//            _tableWidget->setItem(row, column, newItem);
-//        }
-//    }
 }
 
-table::~table()
+Table::~Table()
 {
     delete ui;
 }
 
-void table::closeEvent(QCloseEvent* event) {
+void Table::closeEvent(QCloseEvent* event) {
     QDialog::closeEvent(event);
     emit dialogClosed(_path);
 }
 
-void table::on_pushButton_clicked()
+void Table::on_pushButton_clicked()
 {
     ui->label->setText("");
     QString textData;
     QString line;
+    qDebug() << "ok";
+    qDebug() << _table->rowCount();
+    qDebug() << _table->columnCount();
     for (int i = 0; i < _table->rowCount(); i++) {
         line = "";
         for (int j = 0; j < _table->columnCount(); j++) {
             if (!_table->data(_table->index(i,j)).isNull()) {
                 line += _table->data(_table->index(i,j)).toString();
-                line += ",";    // for .csv file format
+                line += ",";
             }
         }
+        while (line != "" && line.back() == ',') {
+            line.chop(1);
+        }
         if (line != "") {
-            while (line.back() == ',') {
-                line.chop(1);
-            }
             line += '\n';
             textData += line;
         }
     }
-
     QFile csvFile(_path);
     csvFile.open(QFile::WriteOnly | QFile::Truncate);
     QTextStream out(&csvFile);

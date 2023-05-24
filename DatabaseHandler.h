@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 class DatabaseHandler
 {
@@ -9,17 +10,35 @@ private:
     const std::string _inst = "Institute.csv";
     const std::string _tr = "Transport.csv";
     std::string _directoryPath;
+    std::vector<std::vector<std::string>> _cafcinData;
+    std::vector<std::vector<std::string>> _costsData;
+    std::vector<std::vector<std::string>> _instData;
+    std::vector<std::vector<std::string>> _trData;
 public:
+    class FileOpenException : public std::runtime_error {
+    public:
+        FileOpenException(const std::string& filename)
+            : std::runtime_error("Failed to open file: " + filename), filename_(filename) {}
+
+        std::string getFilename() const {
+            return filename_;
+        }
+
+    private:
+        std::string filename_;
+    };
     DatabaseHandler();
     DatabaseHandler(const std::string& directoryPath);
     void setPath(const std::string& path);
-    bool initDatabase() const;
-    std::vector<std::string> getCities();
-    std::vector<std::string> getAddresses();
-    std::vector<std::string> getInstitutes();
-    std::vector<std::string> getCafes();
-    std::vector<std::string> getCinemas();
-    std::vector<unsigned int> getAges();
+    void initDatabase();
+    void readCSV(std::ifstream& file, std::vector<std::vector<std::string>>& vectorData, char delimiter = ',');
+    const std::vector<std::vector<std::string>>& getData() const;
+    std::vector<std::string> getCities() const;
+    std::vector<std::string> getAddresses() const;
+    std::vector<std::string> getInstitutes() const;
+    std::vector<std::string> getCafes() const;
+    std::vector<std::string> getCinemas() const;
+    std::vector<unsigned int> getAges() const;
     unsigned int getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const;
     unsigned int getInstituteDinnerCost(const std::string& city, const std::string& institute) const;

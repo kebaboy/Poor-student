@@ -1,140 +1,138 @@
-#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include "DatabaseHandler.h"
 
 DatabaseHandler::DatabaseHandler(): _directoryPath("") {}
 
 DatabaseHandler::DatabaseHandler(const std::string& directoryPath): _directoryPath(directoryPath) {}
 
-void DatabaseHandler::setPath(const std::string& path) {
+void DatabaseHandler::setPath(const std::string& path)  {
     _directoryPath = path;
 }
 
-bool DatabaseHandler::initDatabase() const {
+void DatabaseHandler::initDatabase() {
+    std::vector<std::string> failedFiles;
     std::ifstream cafcinFile(_directoryPath + '/' + _cafcin);
+    if (!cafcinFile.is_open()) {
+        failedFiles.push_back(_cafcin);
+    }
     std::ifstream costsFile(_directoryPath + '/' + _costs);
+    if (!costsFile.is_open()) {
+        failedFiles.push_back(_costs);
+    }
     std::ifstream instFile(_directoryPath + '/' + _inst);
+    if (!instFile.is_open()) {
+        failedFiles.push_back(_inst);
+    }
     std::ifstream trFile(_directoryPath + '/' + _tr);
-    if (cafcinFile.is_open() && costsFile.is_open() && instFile.is_open() && trFile.is_open()) {
-        cafcinFile.close();
-        costsFile.close();
-        instFile.close();
-        trFile.close();
-        return true;
-    } else
-        cafcinFile.close();
-        costsFile.close();
-        instFile.close();
-        trFile.close();
-        return false;
+    if (!trFile.is_open()) {
+        failedFiles.push_back(_tr);
+    }
+    if (!failedFiles.empty()) {
+        std::string failedFilesString;
+        for (size_t i = 0; i < failedFiles.size(); ++i) {
+                failedFilesString += failedFiles[i];
+                if (i != failedFiles.size() - 1) {
+                    failedFilesString += ", ";
+                }
+        }
+
+        throw FileOpenException(failedFilesString);
+    }
+
+    readCSV(cafcinFile, _cafcinData);
+    readCSV(costsFile, _costsData);
+    readCSV(instFile, _instData);
+    readCSV(trFile, _trData);
+
+
+    cafcinFile.close();
+    costsFile.close();
+    instFile.close();
+    trFile.close();
 }
 
-std::vector<std::string> DatabaseHandler::getCities() {
-    std::vector<std::string> v;
-    std::ifstream transport(_directoryPath + '/' + _tr);
+void DatabaseHandler::readCSV(std::ifstream& file, std::vector<std::vector<std::string>>& vectorData, char delimiter) {
     std::string line;
-    getline(transport, line);
-    while(getline(transport, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), word) == v.end()) {
-            v.push_back(word);
+    while (std::getline(file, line)) {
+        std::vector<std::string> row;
+        std::stringstream ss(line);
+        std::string cell;
+
+        while (std::getline(ss, cell, delimiter)) {
+            row.push_back(cell);
+        }
+
+        vectorData.push_back(row);
+    }
+}
+
+const std::vector<std::vector<std::string>>& DatabaseHandler::getData() const {
+        return _cafcinData;
+}
+
+
+std::vector<std::string> DatabaseHandler::getCities() const {
+    std::vector<std::string> v;
+    for (size_t i = 1; i < _trData.size(); i++) {
+        if (!_trData[i].empty() && (std::find(v.begin(), v.end(), _trData[i][0]) == v.end())) {
+            v.push_back(_trData[i][0]);
         }
     }
     return v;
 }
 
-std::vector<std::string> DatabaseHandler::getAddresses() {
+std::vector<std::string> DatabaseHandler::getAddresses() const {
     std::vector<std::string> v;
-    std::ifstream addresses(_directoryPath + '/' + _tr);
-    std::string line;
-    getline(addresses, line);
-    while(getline(addresses, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), word) == v.end()) {
-            v.push_back(word);
+    for (size_t i = 1; i < _trData.size(); i++) {
+        if (!_trData[i].empty() && (std::find(v.begin(), v.end(), _trData[i][1]) == v.end())) {
+            v.push_back(_trData[i][1]);
+        }
+        }
+    return v;
+}
+
+std::vector<std::string> DatabaseHandler::getInstitutes() const {
+    std::vector<std::string> v;
+    for (size_t i = 1; i < _instData.size(); i++) {
+        if (!_instData[i].empty() && (std::find(v.begin(), v.end(), _instData[i][1]) == v.end())) {
+            v.push_back(_instData[i][1]);
         }
     }
     return v;
 }
 
-std::vector<std::string> DatabaseHandler::getInstitutes() {
+std::vector<std::string> DatabaseHandler::getCafes() const {
     std::vector<std::string> v;
-    std::ifstream institutes(_directoryPath + '/' + _inst);
-    std::string line;
-    getline(institutes, line);
-    while(getline(institutes, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), word) == v.end()) {
-            v.push_back(word);
+    for (size_t i = 1; i < _cafcinData.size(); i++) {
+        if (!_cafcinData[i].empty() && (std::find(v.begin(), v.end(), _cafcinData[i][2]) == v.end())) {
+            v.push_back(_cafcinData[i][2]);
         }
     }
     return v;
 }
 
-std::vector<std::string> DatabaseHandler::getCafes() {
+std::vector<std::string> DatabaseHandler::getCinemas() const {
     std::vector<std::string> v;
-    std::ifstream cafes(_directoryPath + '/' + _cafcin);
-    std::string line;
-    getline(cafes, line);
-    while(getline(cafes, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), word) == v.end()) {
-            v.push_back(word);
+    for (size_t i = 1; i < _cafcinData.size(); i++) {
+        if (!_cafcinData[i].empty() && (std::find(v.begin(), v.end(), _cafcinData[i][4]) == v.end())) {
+            v.push_back(_cafcinData[i][4]);
         }
-    }
+     }
     return v;
 }
 
-std::vector<std::string> DatabaseHandler::getCinemas() {
-    std::vector<std::string> v;
-    std::ifstream cinemas(_directoryPath + '/' + _cafcin);
-    std::string line;
-    getline(cinemas, line);
-    while(getline(cinemas, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), word) == v.end()) {
-            v.push_back(word);
-        }
-    }
-    return v;
-}
-
-std::vector<unsigned int> DatabaseHandler::getAges() {
+std::vector<unsigned int> DatabaseHandler::getAges() const {
     std::vector<unsigned int> v;
-    std::ifstream costs(_directoryPath + '/' + _costs);
-    std::string line;
-    getline(costs, line);
-    while(getline(costs, line)) {
-        std::stringstream lineStream(line);
-        std::string word;
-        std::getline(lineStream, word, ',');
-        std::getline(lineStream, word, ',');
-        if (std::find(v.begin(), v.end(), stoi(word)) == v.end()) {
-            v.push_back(stoi(word));
+    for (size_t i = 1; i < _costsData.size(); i++) {
+        if (!_costsData[i].empty() && (std::find(v.begin(), v.end(), stoi(_costsData[i][1])) == v.end())) {
+            v.push_back(stoi(_costsData[i][1]));
         }
-    }
+     }
     return v;
 }
 

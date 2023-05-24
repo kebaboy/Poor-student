@@ -15,8 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-//    MainWindow(QWidget *parent = nullptr);
-    MainWindow(DatabaseHandler* database, Student* student);
+    MainWindow(DatabaseHandler* database, Student* student, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -26,6 +25,10 @@ private slots:
 
     void allclear();
 
+    void enableUI();
+
+    void setCompleter(const std::vector<std::string>& v, QLineEdit* line);
+
     void on_clear_clicked();
 
     void on_calculate_clicked();
@@ -33,6 +36,7 @@ private slots:
     bool begincheckLines();
 
     bool endcheckLines();
+
     void on_costs_clicked();
 
     void on_cafcin_clicked();
@@ -47,6 +51,6 @@ private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;
     Student* _student;
-    table* _table = nullptr;
+    Table* _table = nullptr;
 };
 #endif // MAINWINDOW_H
