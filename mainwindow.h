@@ -45,12 +45,15 @@ private slots:
 
     void on_tr_clicked();
 public slots:
-    void onDialogClosed(const QString& path);
-
+//    void onDialogClosed(const QString& path);
+    void onapplyButtonClicked(const QString& path);
 private:
     Ui::MainWindow *ui;
     DatabaseHandler* _database;
     Student* _student;
-    Table* _table = nullptr;
+    Table* _tableCafcin = nullptr;
+    Table* _tableInst = nullptr;
+    Table* _tableTr = nullptr;
+    Table* _tableCosts = nullptr;
 };
 #endif // MAINWINDOW_H

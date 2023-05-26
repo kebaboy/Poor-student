@@ -15,19 +15,25 @@ class Table : public QDialog
     Q_OBJECT
 
 public:
-    explicit Table(const QString& path, QWidget *parent = nullptr);
+    explicit Table(const QString& filename, std::vector<std::vector<std::string>>& data, QWidget *parent);
     ~Table();
 signals:
-    void dialogClosed(const QString& path);
-protected:
-    void closeEvent(QCloseEvent* event) override;
+//    void dialogClosed(const QString& filename);
+    void applyButtonClicked(const QString& filename);
+//protected:
+//    void closeEvent(QCloseEvent* event) override;
 private slots:
-    void on_pushButton_clicked();
+    void on_applyButton_clicked();
+    void on_addButton_clicked();
 
+    void on_deleteButton_clicked();
+
+public slots:
+    void setTable(const std::vector<std::vector<std::string>>& data);
 private:
     Ui::table *ui;
-    QStandardItemModel *_table;
-    const QString _path;
+    const QString _filename;
+    std::vector<std::vector<std::string>>* _data;
 };
 
 #endif // TABLE_H

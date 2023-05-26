@@ -1,33 +1,17 @@
 #include "table.h"
 #include "ui_table.h"
+#include <set>
 #include <QDebug>
 
-Table::Table(const QString& path, QWidget *parent) :
+Table::Table(const QString& filename, std::vector<std::vector<std::string>>& data, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::table),
-    _path(path)
+    _filename(filename),
+    _data(&data)
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
-    _table = new QStandardItemModel(this);
-    ui->tableView->setModel(_table);
-    QFile file(_path);
-    file.open(QFile::ReadOnly | QFile::Text);
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        // ... построчно
-        QString line = in.readLine();
-        // Добавляем в модель по строке с элементами
-        QList<QStandardItem *> standardItemsList;
-        // учитываем, что строка разделяется точкой с запятой на колонки
-        for (QString item : line.split(",")) {
-            standardItemsList.append(new QStandardItem(item));
-        }
-        _table->insertRow(_table->rowCount(), standardItemsList);
-    }
-    file.close();
-    _table->setColumnCount(100);
-    _table->setRowCount(100);
+    setTable(data);
 }
 
 Table::~Table()
@@ -35,40 +19,65 @@ Table::~Table()
     delete ui;
 }
 
-void Table::closeEvent(QCloseEvent* event) {
-    QDialog::closeEvent(event);
-    emit dialogClosed(_path);
-}
+//void Table::closeEvent(QCloseEvent* event) {
+//    QDialog::closeEvent(event);
+//    emit dialogClosed(_filename);
+//}
 
-void Table::on_pushButton_clicked()
+void Table::on_applyButton_clicked()
 {
     ui->label->setText("");
-    QString textData;
-    QString line;
-    qDebug() << "ok";
-    qDebug() << _table->rowCount();
-    qDebug() << _table->columnCount();
-    for (int i = 0; i < _table->rowCount(); i++) {
-        line = "";
-        for (int j = 0; j < _table->columnCount(); j++) {
-            if (!_table->data(_table->index(i,j)).isNull()) {
-                line += _table->data(_table->index(i,j)).toString();
-                line += ",";
+    QTableWidget* tableWidget = this->findChild<QTableWidget*>("tableWidget");
+    _data->resize(tableWidget->rowCount());
+        for (int row = 0; row < tableWidget->rowCount(); ++row) {
+            (*_data)[row].resize(tableWidget->columnCount());
+            for (int col = 0; col < tableWidget->columnCount(); ++col) {
+                QTableWidgetItem* item = tableWidget->item(row, col);
+                if (item) {
+                    (*_data)[row][col] = item->text().toStdString();
+                }
             }
         }
-        while (line != "" && line.back() == ',') {
-            line.chop(1);
-        }
-        if (line != "") {
-            line += '\n';
-            textData += line;
+    emit applyButtonClicked(_filename);
+
+    ui->label->setText("Changes successfully saved");
+}
+
+void Table::setTable(const std::vector<std::vector<std::string>>& data) {
+    QTableWidget* tableWidget = this->findChild<QTableWidget*>("tableWidget");
+    tableWidget->setRowCount(data.size());
+    tableWidget->setColumnCount(data[0].size());
+    for (int row = 0; row < tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < tableWidget->columnCount(); ++col) {
+            // Преобразуем std::string в QString и устанавливаем в ячейку таблицы
+            QString cellData = QString::fromStdString(data[row][col]);
+            tableWidget->setItem(row, col, new QTableWidgetItem(cellData));
         }
     }
-    QFile csvFile(_path);
-    csvFile.open(QFile::WriteOnly | QFile::Truncate);
-    QTextStream out(&csvFile);
-    out << textData;
-    csvFile.close();
-    ui->label->setText("Changes successfully saved");
+}
 
+void Table::on_addButton_clicked()
+{
+    QTableWidget* tableWidget = this->findChild<QTableWidget*>("tableWidget");
+    tableWidget->insertRow(tableWidget->rowCount());
+}
+
+void Table::on_deleteButton_clicked()
+{
+    QTableWidget* tableWidget = this->findChild<QTableWidget*>("tableWidget");
+    QItemSelectionModel* selectionModel = tableWidget->selectionModel();
+    QModelIndexList selectedRows = selectionModel->selectedRows();
+    if (!selectedRows.isEmpty()) {
+        std::set<int> rowsToDelete;
+        for (const QModelIndex& index : selectedRows) {
+                rowsToDelete.insert(index.row());
+        }
+            // Удаляем строки в обратном порядке, чтобы не нарушить индексы
+        for (auto it = rowsToDelete.rbegin(); it != rowsToDelete.rend(); ++it) {
+            int row = *it;
+            tableWidget->removeRow(row);
+        }
+    } else if (tableWidget->rowCount() > 0) {
+        tableWidget->removeRow(tableWidget->rowCount() - 1);
+    }
 }

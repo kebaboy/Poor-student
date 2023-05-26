@@ -32,7 +32,11 @@ public:
     void setPath(const std::string& path);
     void initDatabase();
     void readCSV(std::ifstream& file, std::vector<std::vector<std::string>>& vectorData, char delimiter = ',');
-    const std::vector<std::vector<std::string>>& getData() const;
+    std::vector<std::vector<std::string>>& getcafcinData();
+    std::vector<std::vector<std::string>>& getcostsData();
+    std::vector<std::vector<std::string>>& getinstData();
+    std::vector<std::vector<std::string>>& gettrData();
+
     std::vector<std::string> getCities() const;
     std::vector<std::string> getAddresses() const;
     std::vector<std::string> getInstitutes() const;

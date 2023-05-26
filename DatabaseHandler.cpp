@@ -71,8 +71,17 @@ void DatabaseHandler::readCSV(std::ifstream& file, std::vector<std::vector<std::
     }
 }
 
-const std::vector<std::vector<std::string>>& DatabaseHandler::getData() const {
+std::vector<std::vector<std::string>>& DatabaseHandler::getcafcinData() {
         return _cafcinData;
+}
+std::vector<std::vector<std::string>>& DatabaseHandler::getcostsData() {
+        return _costsData;
+}
+std::vector<std::vector<std::string>>& DatabaseHandler::getinstData() {
+        return _instData;
+}
+std::vector<std::vector<std::string>>& DatabaseHandler::gettrData() {
+        return _trData;
 }
 
 
@@ -149,246 +158,83 @@ unsigned int DatabaseHandler::getDaysCount(unsigned int month) const {
 }
 
 unsigned int DatabaseHandler::getHomeFoodCost(const std::string& city, unsigned int age, unsigned int month) const {
-    std::ifstream food(_directoryPath + '/' + _costs);
-//    if (!food.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    std::string agee = std::to_string(age);
-    getline(food, line);
-
-    while(getline(food, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-            std::getline(lineStream, word, ',');
-            if (word == agee) {
-                std::getline(lineStream, cost, ',');
-                tr = 1;
-                break;
-            }
-            else {
-                continue;
-            }
-        }
-        else {
-            continue;
-        }
-    }
-    if (tr == 0) {
+    auto foundIt = std::find_if(_costsData.begin(), _costsData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), std::to_string(age)) != innerVec.end();
+    });
+    if (foundIt == _costsData.end()) {
         std::cout << "There is no food cost for city: " << city << ", age: " << age << std::endl;
         exit(0);
     }
-    unsigned int costt = std::stoi(cost) / getDaysCount(month);
-    food.close();
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[2]) / getDaysCount(month);
 }
 
 unsigned int DatabaseHandler::getCinemaCost(const std::string& city, const std::string& cinema) const {
-    std::ifstream kino(_directoryPath + '/' + _cafcin);
-//    if (!kino.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    getline(kino, line);
-    
-    while(getline(kino, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-            std::getline(lineStream, word, ',');
-            std::getline(lineStream, word, ',');
-            std::getline(lineStream, word, ',');
-            std::getline(lineStream, word, ',');
-            if (word == cinema) {
-                std::getline(lineStream, cost);
-                tr = 1;
-                break;
-            }
-            else {
-                continue;
-            }
-        }
-        else {
-            continue;
-        }
-    }
-    if (tr == 0) {
+    auto foundIt = std::find_if(_cafcinData.begin(), _cafcinData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), cinema) != innerVec.end();
+    });
+    if (foundIt == _cafcinData.end()) {
         std::cout << "There is no cinema cost for city: " << city << ", cinema: " << cinema << std::endl;
         exit(0);
     }
-    unsigned int costt = std::stoi(cost);
-    kino.close();
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[5]);
 }
 
 unsigned int DatabaseHandler::getCoffeeCost(const std::string& city, const std::string& coffee) const {
-    std::ifstream cofe(_directoryPath + '/' + _cafcin);
-//    if (!cofe.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    getline(cofe, line);
-    
-    while(getline(cofe, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-            std::getline(lineStream, word, ',');
-            std::getline(lineStream, word, ',');
-            if (word == coffee) {
-                std::getline(lineStream, cost);
-                tr = 1;
-                break;
-            }
-            else {
-                continue;
-            }
-        }
-        else {
-            continue;
-        }
-    }
-    if (tr == 0) {
+    auto foundIt = std::find_if(_cafcinData.begin(), _cafcinData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), coffee) != innerVec.end();
+    });
+    if (foundIt == _cafcinData.end()) {
         std::cout << "There is no coffee cost for city: " << city << ", coffee: " << coffee << std::endl;
         exit(0);
     }
-    unsigned int costt = std::stoi(cost);
-    cofe.close();
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[3]);
 }
 
 unsigned int DatabaseHandler::getTransportCost(const std::string& city, const std::string& homeAddress,
                       const std::string& institute) const {
-    std::ifstream transport(_directoryPath + '/' + _tr);
-//    if (!transport.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    getline(transport, line);
-    
-    while(getline(transport, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-                std::getline(lineStream, word, ',');
-                if (word == homeAddress) {
-                    std::getline(lineStream, word, ',');
-                    if (word == institute) {
-                        std::getline(lineStream, cost);
-                        tr = 1;
-                        break;
-                    }
-                    else {
-                        continue;
-                    }
-                }
-                else {
-                    continue;
-                }
-        } else {
-            continue;
-        }
-    }
-    if (tr == 0) {
+    auto foundIt = std::find_if(_trData.begin(), _trData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), homeAddress) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), institute) != innerVec.end();
+    });
+    if (foundIt == _trData.end()) {
         std::cout << "There is no transport cost for city: " << city << ", home address: " << homeAddress << ", institute: " << institute << std::endl;
         exit(0);
     }
-    unsigned int costt = std::stoi(cost);
-    transport.close();
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[3]);
 }
 
 unsigned int DatabaseHandler::getInstituteDinnerCost(const std::string& city, const std::string& institute) const {
-    std::ifstream dinner(_directoryPath + '/' + _inst);
-//    if (!dinner.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    getline(dinner, line);
-    
-    while(getline(dinner, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-            std::getline(lineStream, word, ',');
-            if (word == institute) {
-                std::getline(lineStream, cost);
-                tr = 1;
-                break;
-            }
-            else {
-                continue;
-            }
-        }
-        else {
-            continue;
-        }
-    }
-    if (tr == 0) {
+    auto foundIt = std::find_if(_instData.begin(), _instData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), institute) != innerVec.end();
+    });
+    if (foundIt == _instData.end()) {
         std::cout << "There is no institute dinner cost for city: " << city << ", institute: " << institute << std::endl;
         exit(0);
     }
-    unsigned int costt = std::stoi(cost);
-    dinner.close();
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[2]);
 }
 
 unsigned int DatabaseHandler::getOtherMontlyCosts(unsigned int month, const std::string& city, unsigned int age) const {
-    std::ifstream other(_directoryPath + '/' + _costs);
-//    if (!other.is_open()) {
-//        return 0;
-//    }
-    int tr = 0;
-    std::string word;
-    std::string cost;
-    std::string line;
-    std::string agee = std::to_string(age);
-    getline(other, line);
-
-    while(getline(other, line)) {
-        std::stringstream lineStream(line);
-        std::getline(lineStream, word, ',');
-        if (word == city) {
-            std::getline(lineStream, word, ',');
-            if (word == agee) {
-                std::getline(lineStream, word, ',');
-                std::getline(lineStream, cost);
-                tr = 1;
-                break;
-            }
-            else {
-                continue;
-            }
-        }
-        else {
-            continue;
-        }
+    auto foundIt = std::find_if(_costsData.begin(), _costsData.end(), [&](const std::vector<std::string>& innerVec) {
+            return std::find(innerVec.begin(), innerVec.end(), city) != innerVec.end() &&
+                   std::find(innerVec.begin(), innerVec.end(), std::to_string(age)) != innerVec.end();
+    });
+    if (foundIt == _costsData.end()) {
+        std::cout << "There is no other montly cost for city: " << city << ", age: " << age << std::endl;
+        exit(0);
     }
-    if (tr == 0) {
-        return 0;
-//        std::cout << "There is no other montly cost for city: " << city << ", age: " << age << std::endl;
-//        exit(0);
-    }
-    unsigned int costt = std::stoi(cost);
-    other.close();
-    std::cout << "OtherMontlyCosts: " << costt << '\n';
-    return costt;
+    const std::vector<std::string>& foundVector = *foundIt;
+    return std::stoi(foundVector[3]);
 }
 
 std::string DatabaseHandler::getCafcin() const {

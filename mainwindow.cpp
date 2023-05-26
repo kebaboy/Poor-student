@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <iostream>
+#include <fstream>
 
 MainWindow::MainWindow(DatabaseHandler* database, Student* student, QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow), _database(database), _student(student)
 {
@@ -111,159 +112,13 @@ void MainWindow::on_directory_clicked()
         setCompleter(_database->getInstitutes(), ui->institute_line);
         setCompleter(_database->getCafes(), ui->cafe_line);
         setCompleter(_database->getCinemas(), ui->cinema_line);
-
-//        std::vector<std::string> v = _database->getCities();
-//        QStringList qlist;
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->city_line->completer();
-//        ui->city_line->setCompleter(nullptr);
-//        QCompleter *completerCities = new QCompleter(qlist, this);
-//        //qDebug() << completerCities->parent(); при удалении родительского MainWindow дочерние также удалаются
-//        completerCities->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->city_line->setCompleter(completerCities);
-
-//        v = _database->getAddresses();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->address_line->completer();
-//        ui->address_line->setCompleter(nullptr);
-//        QCompleter *completerAddresses = new QCompleter(qlist, this);
-//        completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->address_line->setCompleter(completerAddresses);
-
-//        v = _database->getInstitutes();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->institute_line->completer();
-//        ui->institute_line->setCompleter(nullptr);
-//        QCompleter *completerInstitutes = new QCompleter(qlist, this);
-//        completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->institute_line->setCompleter(completerInstitutes);
-
-//        v = _database->getCafes();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->cafe_line->completer();
-//        ui->cafe_line->setCompleter(nullptr);
-//        QCompleter *completerCafes = new QCompleter(qlist, this);
-//        completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->cafe_line->setCompleter(completerCafes);
-
-//        v = _database->getCinemas();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->cinema_line->completer();
-//        ui->cinema_line->setCompleter(nullptr);
-//        QCompleter *completerCinemas = new QCompleter(qlist, this);
-//        completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->cinema_line->setCompleter(completerCinemas);
     } catch (const DatabaseHandler::FileOpenException& ex) {
         QString errorMessage = QString::fromStdString(ex.what());
         QString failedFiles = QString::fromStdString(ex.getFilename());
         allclear();
         QMessageBox::warning(this, "Error", "Failed to open the following files:\n" + failedFiles);
     }
-
-
-//    if (_database->initDatabase()) {
-//        ui->costs->setText(QString::fromStdString(_database->getCosts()));
-//        ui->costs->setVisible(true);
-//        ui->inst->setText(QString::fromStdString(_database->getInst()));
-//        ui->inst->setVisible(true);
-//        ui->tr->setText(QString::fromStdString(_database->getTr()));
-//        ui->tr->setVisible(true);
-//        ui->cafcin->setText(QString::fromStdString(_database->getCafcin()));
-//        ui->cafcin->setVisible(true);
-//        ui->output->setText("");
-//        ui->cafe_line->setEnabled(true);
-//        ui->city_line->setEnabled(true);
-//        ui->address_line->setEnabled(true);
-//        ui->institute_line->setEnabled(true);
-//        ui->name_line->setEnabled(true);
-//        ui->cinema_line->setEnabled(true);
-//        ui->spinBox_month->setEnabled(true);
-//        ui->calculate->setEnabled(true);
-//        ui->cafe->setEnabled(true);
-//        ui->city->setEnabled(true);
-//        ui->address->setEnabled(true);
-//        ui->institute->setEnabled(true);
-//        ui->name->setEnabled(true);
-//        ui->cinema->setEnabled(true);
-//        ui->month->setEnabled(true);
-//        ui->radioButton->setEnabled(true);
-//        ui->clear->setEnabled(true);
-//        std::vector<std::string> v = _database->getCities();
-//        QStringList qlist;
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->city_line->completer();
-//        ui->city_line->setCompleter(nullptr);
-//        QCompleter *completerCities = new QCompleter(qlist, this);
-//        //qDebug() << completerCities->parent(); при удалении родительского MainWindow дочерние также удалаются
-//        completerCities->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->city_line->setCompleter(completerCities);
-
-//        v = _database->getAddresses();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->address_line->completer();
-//        ui->address_line->setCompleter(nullptr);
-//        QCompleter *completerAddresses = new QCompleter(qlist, this);
-//        completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->address_line->setCompleter(completerAddresses);
-
-//        v = _database->getInstitutes();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->institute_line->completer();
-//        ui->institute_line->setCompleter(nullptr);
-//        QCompleter *completerInstitutes = new QCompleter(qlist, this);
-//        completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->institute_line->setCompleter(completerInstitutes);
-
-//        v = _database->getCafes();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->cafe_line->completer();
-//        ui->cafe_line->setCompleter(nullptr);
-//        QCompleter *completerCafes = new QCompleter(qlist, this);
-//        completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->cafe_line->setCompleter(completerCafes);
-
-//        v = _database->getCinemas();
-//        qlist.clear();
-//        for(auto elem: v) {
-//            qlist.append(QString::fromStdString(elem));
-//        }
-//        delete ui->cinema_line->completer();
-//        ui->cinema_line->setCompleter(nullptr);
-//        QCompleter *completerCinemas = new QCompleter(qlist, this);
-//        completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
-//        ui->cinema_line->setCompleter(completerCinemas);
-
-//    } else {
-//        allclear();
-//        QMessageBox::warning(this, "warning", "Try another folder");
-//    }
     qDebug() << "Directory Path:" << directory;
-//    delete [] _database;
 }
 
 void MainWindow::on_radioButton_clicked()
@@ -304,48 +159,6 @@ bool MainWindow::begincheckLines()
             lineEdit->setStyleSheet("");
         }
     }
-
-//    if (ui->name_line->text() == "") {
-//        flag = false;
-//        ui->name_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->name_line->setStyleSheet("");
-//    }
-
-//    if (ui->city_line->text() == "") {
-//        flag = false;
-//        ui->city_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->city_line->setStyleSheet("");
-//    }
-
-//    if (ui->address_line->text() == "") {
-//        flag = false;
-//        ui->address_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->address_line->setStyleSheet("");
-//    }
-
-//    if (ui->institute_line->text() == "") {
-//        flag = false;
-//        ui->institute_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->institute_line->setStyleSheet("");
-//    }
-
-//    if (ui->cafe_line->text() == "") {
-//        flag = false;
-//        ui->cafe_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->cafe_line->setStyleSheet("");
-//    }
-
-//    if (ui->cinema_line->text() == "") {
-//        flag = false;
-//        ui->cinema_line->setStyleSheet("QLineEdit {\nborder: 1px solid red;\n}");
-//    } else {
-//        ui->cinema_line->setStyleSheet("");
-//    }
 
     if (ui->spinBox_month->value() == 0 || ui->spinBox_month->text() == "") {
         flag = false;
@@ -443,9 +256,7 @@ void MainWindow::on_calculate_clicked()
 {
     ui->output->clear();
     if (begincheckLines()) {
-        qDebug() << "ok\n";
         if (endcheckLines()) {
-            qDebug() << "ok2\n";
             if (ui->spinBox_age->isEnabled()) {
                 _student->setAge(ui->spinBox_age->value());
             } else {
@@ -459,118 +270,156 @@ void MainWindow::on_calculate_clicked()
             ui->output->setText("Student " + ui->name_line->text() + " spends " + QString::number(costs) + " rubles in month " + ui->spinBox_month->text());
         }
     } else {
-        qDebug() << "neok\n";
         ui->output->setText("");
     }
 }
 
 void MainWindow::on_costs_clicked()
 {
-    if (_table) {
-        qDebug() << "yes";
-        delete _table;
-        _table = nullptr;
+    if (_tableCosts == nullptr) {
+        _tableCosts = new Table(QString::fromStdString(_database->getCosts()), _database->getcostsData(), this);
+        connect(_tableCosts, &Table::applyButtonClicked, this, &MainWindow::onapplyButtonClicked);
+    } else {
+        _tableCosts->setTable(_database->getcostsData());
     }
-    _table = new Table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getCosts()));
-    connect(_table, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
-    _table->setModal(true);
-    _table->exec();
+//    connect(_tableCosts, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
+    _tableCosts->setModal(true);
+    _tableCosts->exec();
 }
 
 void MainWindow::on_cafcin_clicked()
 {
-    if (_table) {
-        qDebug() << "yes";
-        delete _table;
-        _table = nullptr;
+    if (_tableCafcin == nullptr) {
+        _tableCafcin = new Table(QString::fromStdString(_database->getCafcin()), _database->getcafcinData(), this);
+        connect(_tableCafcin, &Table::applyButtonClicked, this, &MainWindow::onapplyButtonClicked);
+    } else {
+        _tableCafcin->setTable(_database->getcafcinData());
     }
-    _table = new Table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getCafcin()));
-    connect(_table, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
-    _table->setModal(true);
-    _table->exec();
+//    connect(_tableCafcin, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
+    _tableCafcin->setModal(true);
+    _tableCafcin->exec();
 }
 
 void MainWindow::on_inst_clicked()
 {
-    if (_table) {
-        qDebug() << "yes";
-        delete _table;
-        _table = nullptr;
+    if (_tableInst == nullptr) {
+        _tableInst = new Table(QString::fromStdString(_database->getInst()), _database->getinstData(), this);
+        connect(_tableInst, &Table::applyButtonClicked, this, &MainWindow::onapplyButtonClicked);
+    } else {
+        _tableInst->setTable(_database->getinstData());
     }
-    _table = new Table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getInst()));
-    connect(_table, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
-    _table->setModal(true);
-    _table->exec();
+//    connect(_tableInst, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
+    _tableInst->setModal(true);
+    _tableInst->exec();
 }
 
 void MainWindow::on_tr_clicked()
 {
-    if (_table) {
-        qDebug() << "yes";
-        delete _table;
-        _table = nullptr;
+    if (_tableTr == nullptr) {
+        _tableTr = new Table(QString::fromStdString(_database->getTr()), _database->gettrData(), this);
+        connect(_tableTr, &Table::applyButtonClicked, this, &MainWindow::onapplyButtonClicked);
+    } else {
+        _tableTr->setTable(_database->gettrData());
     }
-    _table = new Table(QString::fromStdString(_database->getPath()) + '/' + QString::fromStdString(_database->getTr()));
-    connect(_table, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
-    _table->setModal(true);
-    _table->exec();
+//    connect(_tableTr, &Table::dialogClosed, this, &MainWindow::onDialogClosed);
+    _tableTr->setModal(true);
+    _tableTr->exec();
 }
 
-void MainWindow::onDialogClosed(const QString& path) {
-    QFileInfo fileInfo(path);
-    QString fileName = fileInfo.fileName();
-    qDebug() << fileName;
-    std::vector<std::string> v;
-    QStringList qlist;
-    if (fileName.toStdString() == _database->getInst()) {
-        qlist.clear();
-        v = _database->getInstitutes();
-        for(auto elem: v) {
-            qlist.append(QString::fromStdString(elem));
-        }
-        delete ui->institute_line->completer();
-        QCompleter *completerInstitutes = new QCompleter(qlist, this);
-        completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
-        ui->institute_line->setCompleter(completerInstitutes);
-    } else if (fileName.toStdString() == _database->getTr()) {
-        qlist.clear();
-        v = _database->getCities();
-        for(auto elem: v) {
-            qlist.append(QString::fromStdString(elem));
-        }
-        delete ui->city_line->completer();
-        QCompleter *completerCities = new QCompleter(qlist, this);
-        completerCities->setCaseSensitivity(Qt::CaseInsensitive);
-        ui->city_line->setCompleter(completerCities);
-
-        qlist.clear();
-        v = _database->getAddresses();
-        for(auto elem: v) {
-            qlist.append(QString::fromStdString(elem));
-        }
-        delete ui->address_line->completer();
-        QCompleter *completerAddresses = new QCompleter(qlist, this);
-        completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
-        ui->address_line->setCompleter(completerAddresses);
-    } else if (fileName.toStdString() == _database->getCafcin()) {
-        qlist.clear();
-        v = _database->getCafes();
-        for(auto elem: v) {
-            qlist.append(QString::fromStdString(elem));
-        }
-        delete ui->cafe_line->completer();
-        QCompleter *completerCafes = new QCompleter(qlist, this);
-        completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
-        ui->cafe_line->setCompleter(completerCafes);
-
-        qlist.clear();
-        v = _database->getCinemas();
-        for(auto elem: v) {
-            qlist.append(QString::fromStdString(elem));
-        }
-        delete ui->cinema_line->completer();
-        QCompleter *completerCinemas = new QCompleter(qlist, this);
-        completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
-        ui->cinema_line->setCompleter(completerCinemas);
+void MainWindow::onapplyButtonClicked(const QString& filename) {
+    qDebug() << filename;
+    std::ofstream file(_database->getPath() + '/' + filename.toStdString());
+    std::vector<std::vector<std::string>> v;
+    if (filename.toStdString() == _database->getCosts()) {
+        qDebug() << "OK1";
+        v = _database->getcostsData();
+    } else if (filename.toStdString() == _database->getTr()) {
+        qDebug() << "OK2";
+        v = _database->gettrData();
+        setCompleter(_database->getCities(), ui->city_line);
+        setCompleter(_database->getAddresses(), ui->address_line);
+    } else if (filename.toStdString() == _database->getInst()) {
+        qDebug() << "OK3";
+        v = _database->getinstData();
+        setCompleter(_database->getInstitutes(), ui->institute_line);
+    } else if (filename.toStdString() == _database->getCafcin()) {
+        qDebug() << "OK4";
+        v = _database->getcafcinData();
+        setCompleter(_database->getCafes(), ui->cafe_line);
+        setCompleter(_database->getCinemas(), ui->cinema_line);
+    } else {
+        qDebug() << "BAD";
     }
+    for (const auto& row : v) {
+        for (const auto& value : row) {
+            file << value << ",";
+        }
+        file << "\n";
+    }
+    file.close();
 }
+
+//void MainWindow::onDialogClosed(const QString& filename) {
+//    std::vector<std::vector<std::string>> data = _database->getcostsData();
+//    for (const auto& row : data) {
+//            for (const auto& cell : row) {
+//                qDebug() <<  QString::fromStdString(cell);
+//            }
+//    }
+//    QFileInfo fileInfo(path);
+//    QString fileName = fileInfo.fileName();
+//    qDebug() << fileName;
+//    std::vector<std::string> v;
+//    QStringList qlist;
+//    if (fileName.toStdString() == _database->getInst()) {
+//        qlist.clear();
+//        v = _database->getInstitutes();
+//        for(auto elem: v) {
+//            qlist.append(QString::fromStdString(elem));
+//        }
+//        delete ui->institute_line->completer();
+//        QCompleter *completerInstitutes = new QCompleter(qlist, this);
+//        completerInstitutes->setCaseSensitivity(Qt::CaseInsensitive);
+//        ui->institute_line->setCompleter(completerInstitutes);
+//    } else if (fileName.toStdString() == _database->getTr()) {
+//        qlist.clear();
+//        v = _database->getCities();
+//        for(auto elem: v) {
+//            qlist.append(QString::fromStdString(elem));
+//        }
+//        delete ui->city_line->completer();
+//        QCompleter *completerCities = new QCompleter(qlist, this);
+//        completerCities->setCaseSensitivity(Qt::CaseInsensitive);
+//        ui->city_line->setCompleter(completerCities);
+
+//        qlist.clear();
+//        v = _database->getAddresses();
+//        for(auto elem: v) {
+//            qlist.append(QString::fromStdString(elem));
+//        }
+//        delete ui->address_line->completer();
+//        QCompleter *completerAddresses = new QCompleter(qlist, this);
+//        completerAddresses->setCaseSensitivity(Qt::CaseInsensitive);
+//        ui->address_line->setCompleter(completerAddresses);
+//    } else if (fileName.toStdString() == _database->getCafcin()) {
+//        qlist.clear();
+//        v = _database->getCafes();
+//        for(auto elem: v) {
+//            qlist.append(QString::fromStdString(elem));
+//        }
+//        delete ui->cafe_line->completer();
+//        QCompleter *completerCafes = new QCompleter(qlist, this);
+//        completerCafes->setCaseSensitivity(Qt::CaseInsensitive);
+//        ui->cafe_line->setCompleter(completerCafes);
+
+//        qlist.clear();
+//        v = _database->getCinemas();
+//        for(auto elem: v) {
+//            qlist.append(QString::fromStdString(elem));
+//        }
+//        delete ui->cinema_line->completer();
+//        QCompleter *completerCinemas = new QCompleter(qlist, this);
+//        completerCinemas->setCaseSensitivity(Qt::CaseInsensitive);
+//        ui->cinema_line->setCompleter(completerCinemas);
+//    }
+//}
